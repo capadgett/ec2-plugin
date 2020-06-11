@@ -63,15 +63,17 @@ public class AmazonEC2Cloud extends EC2Cloud {
      * Represents the region. Can be null for backward compatibility reasons.
      */
     private String region;
+    private String altEC2Endpoint;
 
     public static final String CLOUD_ID_PREFIX = "ec2-";
 
     private boolean noDelayProvisioning;
 
     @DataBoundConstructor
-    public AmazonEC2Cloud(String cloudName, boolean useInstanceProfileForCredentials, String credentialsId, String region, String privateKey, String sshKeysCredentialsId, String instanceCapStr, List<? extends SlaveTemplate> templates, String roleArn, String roleSessionName) {
+    public AmazonEC2Cloud(String cloudName, boolean useInstanceProfileForCredentials, String altEC2Endpoint, String credentialsId, String region, String privateKey, String sshKeysCredentialsId, String instanceCapStr, List<? extends SlaveTemplate> templates, String roleArn, String roleSessionName) {
         super(createCloudId(cloudName), useInstanceProfileForCredentials, credentialsId, privateKey, sshKeysCredentialsId, instanceCapStr, templates, roleArn, roleSessionName);
         this.region = region;
+        this.altEC2Endpoint = altEC2Endpoint;
     }
 
     @Deprecated
@@ -91,6 +93,13 @@ public class AmazonEC2Cloud extends EC2Cloud {
 
     private static String createCloudId(String cloudName) {
         return CLOUD_ID_PREFIX + cloudName.trim();
+    }
+
+    public String getAltEC2Endpoint() {
+        if (altEC2Endpoint == null) {
+            return "";
+        }
+        return altEC2Endpoint;
     }
 
     public String getRegion() {

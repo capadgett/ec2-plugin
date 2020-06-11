@@ -64,17 +64,27 @@ public class AmazonEC2CloudTest {
     public JenkinsRule r = new JenkinsRule();
 
     private AmazonEC2Cloud cloud;
+    private AmazonEC2Cloud altEC2EndpointCloud;
 
     @Before
     public void setUp() throws Exception {
-        cloud = new AmazonEC2Cloud("us-east-1", true, "abc", "us-east-1", null, "ghi", "3", Collections.emptyList(), "roleArn", "roleSessionName");
+        cloud = new AmazonEC2Cloud("us-east-1", true, "", "abc", "us-east-1", null, "ghi", "3", Collections.emptyList(), "roleArn", "roleSessionName");
         r.jenkins.clouds.add(cloud);
     }
 
     @Test
     public void testConfigRoundtrip() throws Exception {
         r.submit(getConfigForm());
-        r.assertEqualBeans(cloud, r.jenkins.clouds.get(AmazonEC2Cloud.class), "cloudName,region,useInstanceProfileForCredentials,privateKey,instanceCap,roleArn,roleSessionName");
+        r.assertEqualBeans(cloud, r.jenkins.clouds.get(AmazonEC2Cloud.class), "cloudName,region,altEC2Endpoint,useInstanceProfileForCredentials,privateKey,instanceCap,roleArn,roleSessionName");
+    }
+
+    @Test
+    public void testConfigRoundtripWithAltEC2Endpoint() throws Exception {
+        r.jenkins.clouds.remove(cloud);
+        altEC2EndpointCloud = new AmazonEC2Cloud("us-east-1", true, "https://some-endpoint.com", "abc", "us-east-1", null, "ghi", "3", Collections.emptyList(), "roleArn", "roleSessionName");
+        r.jenkins.clouds.add(altEC2EndpointCloud);
+        r.submit(getConfigForm());
+        r.assertEqualBeans(altEC2EndpointCloud, r.jenkins.clouds.get(AmazonEC2Cloud.class), "cloudName,region,altEC2Endpoint,useInstanceProfileForCredentials,privateKey,instanceCap,roleArn,roleSessionName");
     }
 
     @Test

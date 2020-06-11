@@ -33,7 +33,7 @@ public class EC2CloudTest {
     @Test
     public void testReattachOrphanStoppedNodes() throws Exception {
         /* Mocked items */
-        AmazonEC2Cloud cloud = new AmazonEC2Cloud("us-east-1", true,
+        AmazonEC2Cloud cloud = new AmazonEC2Cloud("us-east-1", true, "",
                 "abc", "us-east-1", null, "ghi",
                 "3", Collections.emptyList(), "roleArn", "roleSessionName");
         EC2Cloud spyCloud = PowerMockito.spy(cloud);
