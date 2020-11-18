@@ -95,6 +95,11 @@ public class AmazonEC2Cloud extends EC2Cloud {
         return CLOUD_ID_PREFIX + cloudName.trim();
     }
 
+    @DataBoundSetter
+    public void setAltEC2Endpoint(String altEC2Endpoint) {
+        this.altEC2Endpoint = altEC2Endpoint;
+    }
+
     public String getAltEC2Endpoint() {
         if (altEC2Endpoint == null) {
             return "";
